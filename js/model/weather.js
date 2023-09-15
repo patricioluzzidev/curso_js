@@ -8,14 +8,13 @@ function Weather(day, tempMax, tempMin, description){
     this.alertWeatherDay = () => {
         alert(
             "Día " +
-              this.day +
-              " \n " +
-              this.description +
-              " \n Min: " +
-              this.tempMin +
+            this.day +
+              " \n" +
+            this.description +
+              " \nMin: " +
+            this.tempMin +
               " Max: " +
-              this.tempMax
+            this.tempMax
           );
     }
-    
 }

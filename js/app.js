@@ -1,3 +1,14 @@
+let myTime = new Date().getHours();
+const DAY_HOUR = 6;
+const NIGHT_HOUR = 18;
+
+if(myTime >  DAY_HOUR && myTime < NIGHT_HOUR){
+  document.body.classList.add("light")
+}else{
+  document.body.classList.add("dark")
+}
+
+
 
 const today = new Date();
 const locations = [];
@@ -39,15 +50,14 @@ if (navigator.geolocation) {
 
       myLocation.alertLocation();    
 
-      const namesArray = locations.map((location) => location.name);
-      let chooseLocation = prompt( "¿Quieres ver el clima de " + namesArray + '?');
-      
-      let locationFind = locations.find( location => { return location.name.toLowerCase() == chooseLocation.toLowerCase()})
+      const namesArray = locations.map((location) => location.name) ;
+      let chooseLocation = prompt( "Quieres ver el clima de: \n \n" +  namesArray.join("\n"));
+      console.log
+      let locationFind = locations.find( location => { return location.name.toLowerCase().trim() === (chooseLocation ? chooseLocation.toLowerCase().trim() : '')})
       if(locationFind) {
         locationFind.alertWeather();
       } else{
-        alert(
-          "No se encontraron datos con: " + chooseLocation);
+        alert("No se encuentran datos con esa opción...");
       }
     },
     () => {
