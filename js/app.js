@@ -1,13 +1,127 @@
-let myTime = new Date().getHours();
+AOS.init();
+
+const currentHour = new Date().getHours();
 const DAY_HOUR = 6;
 const NIGHT_HOUR = 18;
 
-if(myTime >  DAY_HOUR && myTime < NIGHT_HOUR){
-  document.body.classList.add("light")
-}else{
-  document.body.classList.add("dark")
+const swictherTheme = document.querySelector('.toggle');
+const hours = new Date().getHours();
+toggle.checked = hours > DAY_HOUR && hours < NIGHT_HOUR;
+
+const root = document.documentElement;
+const labelMode = document.getElementById("label-mode");
+const content = document.getElementById("content");
+const images = document.getElementsByClassName('image');
+
+
+//CONFIGURATION THEME
+
+if(!toggle.checked){
+  theme = "dark";
+  labelMode.innerText = 'Dark mode';
+  root.setAttribute('data-theme', theme);  
+} else {
+  theme = "light";
+  labelMode.innerText = 'Light mode';
+  root.setAttribute('data-theme', theme);  
 }
 
+toggle.addEventListener('click', toggleTheme);
+
+function toggleTheme(){
+  const setTheme = swictherTheme.checked ? 'light' : 'dark';
+  swictherTheme.checked ? labelMode.innerText = 'Light mode' : labelMode.innerText = 'Dark mode';
+  root.setAttribute('data-theme', setTheme);
+}
+
+
+// GEOLOCATION 
+let position = null;
+
+if (position) {
+
+
+  } else {  
+    drawEmptyStateLocation();
+    
+    const activeGeolocationBtn = document.getElementById("active-geolocation-btn");
+    activeGeolocationBtn.addEventListener('click', getGeolocation);
+
+}
+
+
+function drawEmptyStateLocation(){
+  content.innerHTML = `
+  <div class='row'>
+    <div class='col text-center'>
+      <div class='main__content__image__geolocation pb-50'></div>
+      <h2 class='pb-50'>Enable geolocation & check the weather</h2>
+      <button class='btn btn-primary' id='active-geolocation-btn'>Active geolocation</button>
+    </div>
+  </div>`;  
+}
+
+function getGeolocation(){
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      localStorage.setItem('latitude', position.coords.latitude);
+      localStorage.setItem('longitude', position.coords.longitude)
+     },() => {
+      insertModalWarning();
+      openModalWarning();
+    }
+  )
+}
+
+function insertModalWarning() {
+  var modal = document.createElement("div");
+  modal.id = "myModal";
+  modal.classList.add("modal");
+  modal.classList.add("fade");
+  modal.setAttribute("tabindex", "-1");
+  modal.setAttribute("aria-labelledby", "exampleModalLabel");
+  modal.setAttribute("aria-hidden", "true");
+
+  modal.innerHTML = `
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>If you do not enable geolocation, you won't be able to use the weather app. We apologize for any inconvenience.</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function openModalWarning() {
+  $('#myModal').modal('show');
+}
+
+
+/*
+function myFunction() {
+  mode = (mode === "light") ? "dark" : "light";
+  labelMode.innerText = (mode === "light") ? "Light Mode" : "Dark Mode";
+  img.src = (mode === "light") ? "assets/img/20945751.png" : "assets/img/20945752.png";
+  console.log(mode)
+ if(mode == "light"){
+  containerTheme.classList.add("light");
+  containerTheme.classList.remove("dark");
+ }else{
+  console.log("Entra aca")
+  containerTheme.classList.remove("light");
+  containerTheme.classList.add("dark");
+ }
+}
+*/
+
+/*
 
 
 const today = new Date();
@@ -67,3 +181,5 @@ if (navigator.geolocation) {
     }
   );
 }
+
+*/

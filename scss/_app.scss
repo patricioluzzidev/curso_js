@@ -1,0 +1,133 @@
+
+*,
+::after,
+::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root[data-theme="light"]{
+    --bg-color: #39a5cf;
+
+    --text-color: #000;
+
+    --btn-bg-color: #091242;
+    --btn-border-color: #091242;
+    --btn-hover-bg-color: #152a9e;
+    --btn-hover-border-color: #152a9e;
+
+    --img-location: url('../assets/img/light-geolocation.png');
+
+    -webkit-transition: all .8s linear 0s;
+    transition: all .8s linear 0s;
+}
+
+:root[data-theme="dark"]{
+    --bg-color: #06294a;
+
+    --text-color: #FFF;
+
+    --btn-bg-color: #2d55dc;
+    --btn-border-color: #2d55dc;
+    --btn-hover-bg-color: #4294e6;
+    --btn-hover-border-color: #4294e6;
+
+
+    --img-location: url('../assets/img/dark-geolocation.png');
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-transition: all .8s linear 0s;
+    transition: all .8s linear 0s;
+}
+
+body{
+    background-color: var(--bg-color);
+    -webkit-transition: all .8s linear 0s;
+    transition: all .8s linear 0s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.main{
+    h1{
+        font-size: 24px;
+        font-weight: 400;
+        color: var(--text-color);
+        -webkit-transition: all .8s linear 0s;
+        transition: all .8s linear 0s;
+    }
+    
+    h2{
+        font-size: 24px;
+        font-weight: 400;
+        color: var(--text-color);
+        -webkit-transition: all .8s linear 0s;
+        transition: all .8s linear 0s;
+    }
+
+    &__content{
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        min-height: calc(100vh - 80px);
+        gap: 20px;
+        &__image__geolocation{
+            background-image: var(--img-location);
+            background-size: contain;
+            width: 500px;
+            height: 500px;
+            background-repeat: no-repeat;
+            -webkit-transition: all .8s linear 0s;
+            transition: all .8s linear 0s;
+            margin-bottom: 40px;
+        }
+    }
+}
+
+.btn-primary{
+    background: var(--btn-bg-color);
+    border-color: var(--btn-border-color);
+
+    &:hover{
+        background: var(--btn-hover-bg-color);
+        border-color: var(--btn-hover-border-color);
+    }
+}
+
+/*
+#container-theme{
+    background-color: var(--bg-color);
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-transition: all .8s linear 0s;
+    transition: all .8s linear 0s;
+}
+
+#container-theme.dark .boton{
+    background-color: #2d55dc;
+    border: none;
+}
+
+#container-theme .boton{
+    color: white;
+    background-color: #091242;
+    border: none;
+}
+
+#container-theme.dark {
+    background-color: #06294a;
+}
+
+h1{
+    font-size: 24px;
+    font-weight: 300;
+}
+
+h2{
+    font-size: 24px;
+    color: white;
+    font-weight: 300;
+}*/
