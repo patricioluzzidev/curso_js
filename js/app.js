@@ -60,6 +60,7 @@ function getGeolocation(){
     (position) => {
       localStorage.setItem('latitude', position.coords.latitude);
       localStorage.setItem('longitude', position.coords.longitude)
+      content.innerHTML = ``; 
      },() => {
       insertModalWarning();
       openModalWarning();
