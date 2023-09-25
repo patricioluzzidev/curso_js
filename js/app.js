@@ -1,5 +1,3 @@
-AOS.init();
-
 const currentHour = new Date().getHours();
 const DAY_HOUR = 6;
 const NIGHT_HOUR = 18;
@@ -9,7 +7,6 @@ const hours = new Date().getHours();
 toggle.checked = hours > DAY_HOUR && hours < NIGHT_HOUR;
 
 const root = document.documentElement;
-const labelMode = document.getElementById("label-mode");
 const content = document.getElementById("content");
 const images = document.getElementsByClassName('image');
 
@@ -18,11 +15,9 @@ const images = document.getElementsByClassName('image');
 
 if(!toggle.checked){
   theme = "dark";
-  labelMode.innerText = 'Dark mode';
   root.setAttribute('data-theme', theme);  
 } else {
   theme = "light";
-  labelMode.innerText = 'Light mode';
   root.setAttribute('data-theme', theme);  
 }
 
@@ -30,7 +25,6 @@ toggle.addEventListener('click', toggleTheme);
 
 function toggleTheme(){
   const setTheme = swictherTheme.checked ? 'light' : 'dark';
-  swictherTheme.checked ? labelMode.innerText = 'Light mode' : labelMode.innerText = 'Dark mode';
   root.setAttribute('data-theme', setTheme);
 }
 
@@ -43,7 +37,7 @@ if (position) {
 
   } else {  
     drawEmptyStateLocation();
-    
+
     const activeGeolocationBtn = document.getElementById("active-geolocation-btn");
     activeGeolocationBtn.addEventListener('click', getGeolocation);
 
@@ -55,7 +49,7 @@ function drawEmptyStateLocation(){
   <div class='row'>
     <div class='col text-center'>
       <div class='main__content__image__geolocation pb-50'></div>
-      <h2 class='pb-50'>Enable geolocation & check the weather</h2>
+      <h2 class='pb-50' data-aos="fade">Enable geolocation & check the weather</h2>
       <button class='btn btn-primary' id='active-geolocation-btn'>Active geolocation</button>
     </div>
   </div>`;  
