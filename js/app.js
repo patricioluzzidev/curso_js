@@ -28,13 +28,13 @@ function toggleTheme(){
   root.setAttribute('data-theme', setTheme);
 }
 
-
 // GEOLOCATION 
 let position = null;
+let latitude = localStorage.getItem('latitude');
+let longitude = localStorage.getItem('longitude');
 
-if (position) {
-
-
+if (latitude && longitude) {
+    drawContainerWeather();
   } else {  
     drawEmptyStateLocation();
 
@@ -42,7 +42,53 @@ if (position) {
     activeGeolocationBtn.addEventListener('click', getGeolocation);
 
 }
-
+function drawContainerWeather(){
+  content.innerHTML = `
+  <div class='row'>
+    <div class='col text-center'>
+      <h2 class='pb-50'>Rosario</h2>
+    </div>
+  </div>
+  <div class='row main__content__today'>
+    <div class='col-12 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+  </div>
+  <div class='row main__content__other_days'>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>
+    <div class='col-2 text-center'>
+      <i class="wi wi-day-sunny"></i>
+      <h3>Max. 23° Min. 16°</h3>
+      <span class="main__content__today__weather">Clear</span>
+    </div>    
+  </div>`;
+}
 
 function drawEmptyStateLocation(){
   content.innerHTML = `
@@ -60,7 +106,7 @@ function getGeolocation(){
     (position) => {
       localStorage.setItem('latitude', position.coords.latitude);
       localStorage.setItem('longitude', position.coords.longitude)
-      content.innerHTML = ``; 
+      drawContainerWeather();
      },() => {
       insertModalWarning();
       openModalWarning();

@@ -7,9 +7,9 @@
 }
 
 :root[data-theme="light"] {
-    --bg-color: #39a5cf;
+    --bg-color: #2a8bb1;
 
-    --text-color: #000;
+    --text-color: #FFF;
 
     --btn-bg-color: #091242;
     --btn-border-color: #091242;
@@ -75,6 +75,7 @@ body {
     }
 
     &__content {
+        animation: fadeIn 1.5s ease-in-out forwards;
         display: grid;
         justify-content: center;
         align-content: center;
@@ -90,6 +91,62 @@ body {
             -webkit-transition: all .8s linear 0s;
             transition: all .8s linear 0s;
             margin-bottom: 40px;
+        }
+
+        &__today{
+            animation: fadeIn 1.5s ease-in-out forwards;
+            margin-bottom: 40px;
+            h2 {
+                font-size: 24px;
+                font-weight: 400;
+                color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
+                transition: all .8s linear 0s;
+            }
+            h3 {
+                font-size: 18px;
+                font-weight: 400;
+                color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
+                transition: all .8s linear 0s;
+            }
+            .wi{
+                font-size: 280px;
+                color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
+                transition: all .8s linear 0s; 
+                margin: 60px 0;
+            }
+            &__weather{
+                background: rgba(255, 255, 255, 0.177);
+                font-size: 16px;
+                padding: 8px 16px;
+                border-radius: 10px;
+            }
+        }
+
+        &__other_days{
+            animation: fadeIn 1.5s ease-in-out forwards;
+            h3 {
+                font-size: 18px;
+                font-weight: 400;
+                color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
+                transition: all .8s linear 0s;
+            }
+            .wi{
+                font-size: 28px;
+                color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
+                transition: all .8s linear 0s; 
+                margin: 20px 0;
+            }
+            &__weather{
+                background: rgba(255, 255, 255, 0.177);
+                font-size: 16px;
+                padding: 8px 16px;
+                border-radius: 10px;
+            }
         }
     }
 }
@@ -153,3 +210,11 @@ body {
 }
 
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
