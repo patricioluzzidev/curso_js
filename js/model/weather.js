@@ -16,12 +16,8 @@ function WeatherDay(data){
   this.sunrise = new Date(data.sunrise * 1000);
   this.sunset = new Date(data.sunset * 1000);
   this.temperature = {
-      day: Math.round(data.temp.day),
-      min: Math.round(data.temp.min),
-      max: Math.round(data.temp.max),
-      night: Math.round(data.temp.night),
-      evening: Math.round(data.temp.eve),
-      morning: Math.round(data.temp.morn),
+      min: Math.round(data.main.temp_min),
+      max: Math.round(data.main.temp_max),
   };
   this.pressure = data.pressure;
   this.humidity = data.humidity;

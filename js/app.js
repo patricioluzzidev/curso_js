@@ -8,6 +8,7 @@ toggle.checked = hours > DAY_HOUR && hours < NIGHT_HOUR;
 
 const root = document.documentElement;
 const content = document.getElementById("content");
+const screenWidth = window.screen.width;
 
 //CONFIGURATION THEME
 
@@ -182,17 +183,55 @@ let latitude = localStorage.getItem('latitude');
 let longitude = localStorage.getItem('longitude');
 
 if (latitude && longitude) {
-    drawContainerWeather();
-  } else {  
-    drawEmptyStateLocation();
-    const activeGeolocationBtn = document.getElementById("active-geolocation-btn");
-    activeGeolocationBtn.addEventListener('click', getGeolocation);
+  fetchDailyWeatherForecast(latitude, longitude);
+} else {  
+  drawEmptyStateLocation();
+  const activeGeolocationBtn = document.getElementById("active-geolocation-btn");
+  activeGeolocationBtn.addEventListener('click', getGeolocation);
 }
 
 
-function drawContainerWeather(){
-  const weatherForecastRosario = new WeatherForecast(jsonDataRosario);
+async function fetchDailyWeatherForecast(latitude, longitude) {
+  try {
+    const apiKey = '1f3f6d432735dbd4373eea176b2889eb';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+      throw new Error('La solicitud no pudo completarse correctamente.');
+    }
+
+    const data = await response.json();
+
+    // Organizamos el pronóstico por día
+    const dailyForecast = {};
+    data.list.forEach(item => {
+      const date = new Date(item.dt * 1000);
+      const day = date.toDateString();
+
+      if (!dailyForecast[day]) {
+        dailyForecast[day] = [];
+      }
+
+      dailyForecast[day].push(item);
+    });
+    //this.drawContainerWeather(dailyForecast)
+    console.log(data);
+    this.drawContainerWeather(data);
+    console.log(dailyForecast);
+  } catch (error) {
+    console.error('Ocurrió un error al obtener el pronóstico diario del tiempo:', error);
+  }
+}
+
+function drawContainerWeather(data){
+
+  const weatherForecastRosario = new WeatherForecast(data);
   const {city, forecast} = weatherForecastRosario;
+  const todayWeather = forecast[0];
+  const { weather: { description: weatherDesctiption, main: weatherMain}, temperature: { max: tempMax, min: tempMin}} = todayWeather;
+  
   content.innerHTML = `
   <div class='row'>
     <div class='col text-center'>
@@ -201,31 +240,110 @@ function drawContainerWeather(){
   </div>
   <div class='row main__content__today'>
     <div class='col-12 text-center'>
-      <i class="wi ${weatherIcon(forecast[0]?.weather.description)}"></i>
-      <h3>Max. ${forecast[0]?.temperature.max | "" }° Min. ${forecast[0]?.temperature.min | "" }°</h3>
-      <span class="main__content__today__weather">${forecast[0]?.weather.main ? forecast[0]?.weather.main : ""}</span>
-    </div>
+      <i class="wi ${weatherIcon(weatherDesctiption)}"></i>
+      <h3>${weatherMain ? weatherMain :  "No Data"} | ${tempMax | "0" }° | ${tempMin | "0" }°</h3>
+      ${forecast[0] && `<button class='btn btn-primary' id='more-details-btn'>More details</button>`}
+      </div>
   </div>
-  <div class='row main__content__other_days'>  
+  <div class='row main__content__other_days align-items-sm-center'> 
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="four-days-tab" data-bs-toggle="pill" data-bs-target="#four-days" type="button" role="tab" aria-controls="four-days" aria-selected="true">4 days</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="eight-days-tab" data-bs-toggle="pill" data-bs-target="#eight-days" type="button" role="tab" aria-controls="eight-days" aria-selected="false">8 days</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="four-days" role="tabpanel" aria-labelledby="four-days-tab" tabindex="0">
+        <div class="row">
+        </div> 
+      </div> 
+      <div class="tab-pane fade" id="eight-days" role="tabpanel" aria-labelledby="eight-days-tab" tabindex="0">
+        <div class="row">
+        </div> 
+      </div> 
+    </div> 
   </div>`;
 
-  const otherDaysContainer = document.querySelector('.main__content__other_days');
+  const otherDaysContainer = document.querySelector('#four-days .row');
+  const otherDaysContainer2 = document.querySelector('#eight-days .row');
 
-  for (let i = 1; i < forecast.length; i++) {
-    const dayHtml = `
-      <div class='col-12 col-md-3 text-center'>
-        <i class="wi ${weatherIcon(forecast[i]?.weather.description || "")}"></i>
-        <h3>Max. ${forecast[i]?.temperature.max || "0"}° Min. ${forecast[i]?.temperature.min || "0" }°</h3>
-        <span class="main__content__today__weather">${forecast[i]?.weather.main ? forecast[i]?.weather.main : "No weather"}</span>
-      </div>
-    `;
-    otherDaysContainer.innerHTML += dayHtml;
+  forecast.forEach((day, index) =>{
+    const { date, weather: { description: weatherDesctiption }, temperature: { max: tempMax, min: tempMin}} = day;
+    if(index > 0){
+      if(index <= 4){
+        const fourDaysHtml = `
+        <div class='col-6 col-md-3 text-center'>
+          <h4>${convertDate(date)}</h4>
+          <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
+          <h3>${ tempMax || "0"}°/${ tempMin || "0" }°</h3>
+        </div>`;
+        otherDaysContainer.innerHTML += fourDaysHtml;
+      }
+
+      if (index <= 8){
+        const eightDaysHtml = `
+        <div class='col-6 col-md-1 text-center'>
+          <h4>${convertDate(date)}</h4>
+          <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
+          <h3>${ tempMax || "0"}°/${ tempMin || "0" }°</h3>
+        </div>`;
+        otherDaysContainer2.innerHTML += eightDaysHtml;
+      }
+    }
+  })
+
+
+  if(todayWeather){
+    const moreDetailsBtn = document.getElementById("more-details-btn");
+    moreDetailsBtn.addEventListener('click', function() {
+      moreDetails(todayWeather);
+    });
   }
+}
+
+function moreDetails(day){
+  const {sunrise, sunset, pressure, humidity} = day;
+  Swal.fire({
+    title: "Details",
+    customClass: 'swal-wide',
+    showClass: {
+      popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp'
+    },
+    background: toggle.checked ? '#2a8bb1' : '#06294a',
+    html:
+    `<div class="container align-items-center">
+      <div class="row align-items-center details">
+        <div class="col-6 col-md-3">
+          <i class="wi wi-horizon-alt"></i> <p>Sunrise</p>
+          <p>${sunrise.getHours()}:${sunrise.getMinutes()}</p>
+        </div>
+        <div class="col-6 col-md-3">
+          <i class="wi wi-horizon"></i> <p>Sunset</p>
+          <p>${sunset.getHours()}:${sunset.getMinutes()}</p>
+        </div>
+        <div class="col-6 col-md-3">
+          <i class="wi wi-barometer"></i> <p>Pressure</p>
+          <p>${pressure}</p>
+        </div>
+        <div class="col-6 col-md-3">
+          <i class="wi wi-humidity"></i> <p>Humidity</p>
+          <p>${humidity}%</p>
+        </div>
+      </div>
+      </div>`,
+    showCloseButton: true,
+    showConfirmButton: false
+  });
 }
 
 function drawEmptyStateLocation(){
   content.innerHTML = `
-  <div class='row'>
+  <div class='row d-flex justify-content-center'>
     <div class='col text-center'>
       <div class='main__content__image__geolocation pb-50'></div>
       <h2 class='pb-50' data-aos="fade">Enable geolocation & check the weather</h2>
@@ -241,40 +359,20 @@ function getGeolocation(){
       localStorage.setItem('longitude', position.coords.longitude)
       drawContainerWeather();
      },() => {
-      insertModalWarning();
       openModalWarning();
     }
   )
 }
 
-function insertModalWarning() {
-  var modal = document.createElement("div");
-  modal.id = "myModal";
-  modal.classList.add("modal");
-  modal.classList.add("fade");
-  modal.setAttribute("tabindex", "-1");
-  modal.setAttribute("aria-labelledby", "exampleModalLabel");
-  modal.setAttribute("aria-hidden", "true");
-
-  modal.innerHTML = `
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>If you do not enable geolocation, you won't be able to use the weather app. We apologize for any inconvenience.</p>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-}
 
 function openModalWarning() {
-  $('#myModal').modal('show');
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "If you do not enable geolocation, you won't be able to use the weather app. We apologize for any inconvenience.",
+    icon: 'warning',
+    showCloseButton: true,
+    showConfirmButton: false
+  });
 }
 
 
@@ -306,5 +404,25 @@ function weatherIcon(descripcion) {
       return "wi-day-hail";
     default:
       return "wi-alien";
+  }
+}
+
+function convertDate(date) {
+  if(date){
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+  
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+  
+    if (date.toDateString() === tomorrow.toDateString()) {
+      return 'Tomorrow';
+    } else {
+      return formattedDate;
+    }
+  } else {
+    return "No data";
   }
 }

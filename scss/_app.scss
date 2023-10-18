@@ -7,16 +7,16 @@
 }
 
 :root[data-theme="light"] {
-    --bg-color: #2a8bb1;
+    --bg-color: #{$light-theme-bg-color};
 
-    --text-color: #FFF;
+    --text-color: #{$white};
 
-    --btn-bg-color: #091242;
-    --btn-border-color: #091242;
-    --btn-hover-bg-color: #152a9e;
-    --btn-hover-border-color: #152a9e;
+    --btn-bg-color: #{$light-theme-btn-bg-color};
+    --btn-border-color: #{$light-theme-btn-border-color};
+    --btn-hover-bg-color: #{$light-theme-btn-hover-bg-color};
+    --btn-hover-border-color: #{$light-theme-btn-hover-border-color};
 
-    --swicher-slide-color: #f6f07b;
+    --swicher-slide-color: #{$light-theme-switcher-slide-color};
     --swicher-slide-icon: url('../assets/icons/sun.svg');
 
     --img-location: url('../assets/img/light-geolocation.png');
@@ -27,20 +27,19 @@
 }
 
 :root[data-theme="dark"] {
-    --bg-color: #06294a;
+    --bg-color: #{$dark-theme-bg-color};
 
-    --text-color: #FFF;
+    --text-color: #{$white};
 
-    --btn-bg-color: #2d55dc;
-    --btn-border-color: #2d55dc;
-    --btn-hover-bg-color: #4294e6;
-    --btn-hover-border-color: #4294e6;
+    --btn-bg-color: #{$dark-theme-btn-bg-color};
+    --btn-border-color: #{$dark-theme-btn-border-color};
+    --btn-hover-bg-color: #{$dark-theme-btn-hover-bg-color};
+    --btn-hover-border-color: #{$dark-theme-btn-hover-border-color};
 
+    --swicher-slide-color: #{$dark-theme-switcher-slide-color};
+    --swicher-slide-icon: url('../assets/icons/moon.svg');
 
     --img-location: url('../assets/img/dark-geolocation.png');
-
-    --swicher-slide-color: #2a82db;
-    --swicher-slide-icon: url('../assets/icons/moon.svg');
 
     width: 100%;
     height: 100vh;
@@ -49,12 +48,17 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background: var(--bg-color) center center fixed;
+    color: var(--text-color);
+    background-repeat: no-repeat;
     -webkit-transition: all .8s linear 0s;
     transition: all .8s linear 0s;
     font-family: 'Montserrat', sans-serif;
 }
 
+p, i, .swal2-title{
+    color: var(--text-color);
+}
 
 .main {
     h1 {
@@ -76,16 +80,16 @@ body {
     &__content {
         animation: fadeIn 1.5s ease-in-out forwards;
         display: grid;
-        justify-content: center;
         align-content: center;
-        min-height: calc(100vh - 80px);
+        min-height: calc(100vh - 200px);
         gap: 20px;
 
         &__image__geolocation {
             background-image: var(--img-location);
             background-size: contain;
-            width: 500px;
-            height: 500px;
+            width: 350px;
+            height: 350px;
+            margin: auto;
             background-repeat: no-repeat;
             -webkit-transition: all .8s linear 0s;
             transition: all .8s linear 0s;
@@ -95,6 +99,7 @@ body {
         &__today{
             animation: fadeIn 1.5s ease-in-out forwards;
             margin-bottom: 40px;
+            
             h2 {
                 font-size: 24px;
                 font-weight: 400;
@@ -103,40 +108,44 @@ body {
                 transition: all .8s linear 0s;
             }
             h3 {
-                font-size: 18px;
+                font-size: 20px;
                 font-weight: 400;
                 color: var(--text-color);
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s;
             }
             .wi{
-                font-size: 280px;
-                color: var(--text-color);
+                font-size: 200px;
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s; 
-                margin: 60px 0;
+                margin: 20px 0;
             }
             &__weather{
                 background: rgba(255, 255, 255, 0.177);
                 font-size: 16px;
                 padding: 8px 16px;
                 border-radius: 10px;
-                color: var(--text-color);
             }
         }
 
         &__other_days{
             animation: fadeIn 1.5s ease-in-out forwards;
             h3 {
-                font-size: 18px;
+                font-size: 20px;
                 font-weight: 400;
                 color: var(--text-color);
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s;
             }
-            .wi{
-                font-size: 28px;
+            h4 {
+                font-size: 16px;
+                font-weight: 400;
+                -webkit-transition: all .8s linear 0s;
                 color: var(--text-color);
+                transition: all .8s linear 0s;
+            }
+            .wi{
+                font-size: 40px;
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s; 
                 margin: 20px 0;
@@ -147,7 +156,6 @@ body {
                 padding: 8px 16px;
                 border-radius: 10px;
                 display: inline-flex;
-                color: var(--text-color);
             }
         }
     }
@@ -211,6 +219,23 @@ body {
 
 }
 
+.details{
+    .wi{
+        font-size: 40px;
+        -webkit-transition: all .8s linear 0s;
+        transition: all .8s linear 0s; 
+        margin: 20px 0;
+    }
+}
+
+.swal-wide{
+    width:100% !important;
+    height: 100vh;
+    margin: 0;
+}
+.swal2-container{
+    padding: 0;
+}
 
 @keyframes fadeIn {
     0% {
