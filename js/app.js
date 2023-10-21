@@ -44,17 +44,20 @@ if (latitude && longitude) {
 async function fetchDailyWeatherForecast(latitude, longitude) {
   try {
     const apiKey = '1f3f6d432735dbd4373eea176b2889eb';
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const apiUrlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    const apiUrlForescast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
-    const response = await fetch(apiUrl);
+    const responseWeather = await fetch(apiUrlWeather);
+    const responseForecast = await fetch(apiUrlForescast);
 
-    if (!response.ok) {
-      throw new Error('Error endpoint!');
+    if (!responseWeather.ok || !responseForecast.ok) {
+      throw new Error('Error endpoints!');
+    } else {
+      const dataWeather = await responseWeather.json();
+      const dataForecast = await responseForecast.json();
+      this.drawContainerWeather(dataWeather);
+      this.drawContainerForescast(dataForecast);  
     }
-
-    const data = await response.json();
-
-    this.drawContainerWeather(data);
 
   } catch (error) {
     this.openModalError(error);
@@ -64,7 +67,7 @@ async function fetchDailyWeatherForecast(latitude, longitude) {
 function drawContainerWeather(data){
 
   const weatherData = new WeatherPerDay(data);
-  const { weather} = weatherData;
+  const { weather, main: {temp_max, temp_min}} = weatherData;
   const { description: weatherDesctiption, main: weatherMain} = weather;
   
   content.innerHTML = `
@@ -76,80 +79,72 @@ function drawContainerWeather(data){
   <div class='row main__content__today'>
     <div class='col-12 text-center'>
       <i class="wi ${weatherIcon(weatherDesctiption)}"></i>
-      <h3>${weatherMain ? weatherMain :  "No Data"} | ${weatherData.main.temp_max | "0" }° | ${weatherData.main.temp_min | "0" }°</h3>
+      <h3>${weatherMain ? weatherMain :  "No Data"} | ${ temp_max ? Math.round(temp_max) : "0" }° | ${ temp_min ? Math.round(temp_min) : "0" }°</h3>
       ${ weather && `<button class='btn btn-primary' id='more-details-btn'>More details</button>`}
       </div>
   </div>
-  `
-  /*
-  <div class='row main_content_other_days align-items-sm-center'> 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="four-days-tab" data-bs-toggle="pill" data-bs-target="#four-days" type="button" role="tab" aria-controls="four-days" aria-selected="true">4 days</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="eight-days-tab" data-bs-toggle="pill" data-bs-target="#eight-days" type="button" role="tab" aria-controls="eight-days" aria-selected="false">8 days</button>
-      </li>
+  <div class='row main__content__other__days align-items-sm-center'>
+    <ul class="nav nav-tabs" id="myTabHeader" role="tablist">
     </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="four-days" role="tabpanel" aria-labelledby="four-days-tab" tabindex="0">
-        <div class="row">
-        </div> 
-      </div> 
-      <div class="tab-pane fade" id="eight-days" role="tabpanel" aria-labelledby="eight-days-tab" tabindex="0">
-        <div class="row">
-        </div> 
-      </div> 
-    </div> 
-  </div>`;
+    <div class="tab-content" id="myTabContent"> 
+    </div>
+  </div>`
 
-  const otherDaysContainer = document.querySelector('#four-days .row');
-  const otherDaysContainer2 = document.querySelector('#eight-days .row');
-
-  forecast.forEach((day, index) =>{
-    const { date, weather: { description: weatherDesctiption }, temperature: { max: tempMax, min: tempMin}} = day;
-    if(index > 0){
-      if(index <= 4){
-        const fourDaysHtml = `
-        <div class='col-6 col-md-3 text-center'>
-          <h4>${convertDate(date)}</h4>
-          <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
-          <h3>${ tempMax || "0"}°/${ tempMin || "0" }°</h3>
-        </div>`;
-        otherDaysContainer.innerHTML += fourDaysHtml;
-      }
-
-      if (index <= 8){
-        const eightDaysHtml = `
-        <div class='col-6 col-md-1 text-center'>
-          <h4>${convertDate(date)}</h4>
-          <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
-          <h3>${ tempMax || "0"}°/${ tempMin || "0" }°</h3>
-        </div>`;
-        otherDaysContainer2.innerHTML += eightDaysHtml;
-      }
-    }
-  })
-
-  */
   if(weatherData){
-    const moreDetailsBtn = document.getElementById("more-details-btn");
+    const moreDetailsBtn = document.querySelector("#more-details-btn");
     moreDetailsBtn.addEventListener('click', function() {
       moreDetails(weatherData);
     });
   }
 }
 
-function drawEmptyStateLocation(){
-  content.innerHTML = `
-  <div class='row d-flex justify-content-center'>
-    <div class='col text-center'>
-    <div class='main__content__image__geolocation pb-50'></div>
-    <h2 class='pb-50' data-aos="fade">Enable geolocation & check the weather</h2>
-      <button class='btn btn-primary' id='active-geolocation-btn'>Active geolocation</button>
+function drawContainerForescast(data){
+  const forescastData = new ForecastData(data);
+  const groupedByDay = forescastData.groupByDay();
+
+  const main__content__other__days = document.querySelector('.main__content__other__days'); 
+  main__content__other__days.innerHTML = `
+  <div class='row main__content__other__days align-items-sm-center'>
+    <ul class="nav nav-tabs justify-content-center" id="myTabHeader" role="tablist">
+    </ul>
+    <div class="tab-content" id="myTabContent"> 
     </div>
-  </div>`;  
+  </div>`;
+  
+  const myTabHeader = document.querySelector('#myTabHeader');
+  const myTabContent = document.querySelector('#myTabContent');
+  const limitDay = 2;
+
+  groupedByDay.forEach((day, index) =>{
+
+    if(index <= limitDay){
+      myTabHeader.innerHTML += `
+      <li class="nav-item" role="presentation">
+        <button class="nav-link ${ index === 0 ? 'active' : '' }" id="${ day.date }-tab" data-bs-toggle="pill" data-bs-target="#${ day.date }" type="button" role="tab" aria-controls="${ day.date }" aria-selected="true">${ index === 0 ? 'TODAY' : day.date.toUpperCase() }</button>
+      </li>`
+
+      myTabContent.innerHTML += `
+      <div class="tab-pane fade show ${ index === 0 ? 'active' : '' }" id="${ day.date }" role="tabpanel" aria-labelledby="${ day.date }-tab" tabindex="0">
+        <div class="row justify-content-center"></div>
+      </div>`
+
+      day.weatherData.forEach((weatherItem) => {
+        const weatherData = new WeatherPerDay(weatherItem);
+        const { weather, main: {temp_max, temp_min}, date } = weatherData;
+        const { description: weatherDesctiption } = weather;
+       
+        const divContent = document.querySelector(`#${ day.date } .row`);
+        divContent.innerHTML +=`
+        <div class='col-12 col-md-1 text-center'>
+          <h2>${ date }hs</h2>
+          <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
+          <h3>${ temp_max ? Math.round(temp_max) : "0" }° | ${ temp_min ? Math.round(temp_min) : "0" }°</h3>
+        </div>`;
+      })
+    }
+  })
 }
+
 
 function getGeolocation(){
   navigator.geolocation.getCurrentPosition(

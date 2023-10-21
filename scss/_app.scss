@@ -126,24 +126,24 @@ p, i, .swal2-title{
             }
         }
 
-        &__other_days{
+        &__other__days{
             animation: fadeIn 1.5s ease-in-out forwards;
-            h3 {
-                font-size: 20px;
+            h2 {
+                font-size: 16px;
                 font-weight: 400;
                 color: var(--text-color);
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s;
             }
-            h4 {
-                font-size: 16px;
+            h3 {
+                font-size: 14px;
                 font-weight: 400;
-                -webkit-transition: all .8s linear 0s;
                 color: var(--text-color);
+                -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s;
             }
             .wi{
-                font-size: 40px;
+                font-size: 60px;
                 -webkit-transition: all .8s linear 0s;
                 transition: all .8s linear 0s; 
                 margin: 20px 0;
@@ -233,6 +233,15 @@ p, i, .swal2-title{
 }
 .swal2-container{
     padding: 0;
+}
+
+.nav-tabs{
+    border: none;
+}
+
+.nav-tabs .nav-link {
+    color: var(--text-color);
+    margin-bottom: 30px;
 }
 
 .loader {
