@@ -32,6 +32,7 @@ let latitude = localStorage.getItem('latitude');
 let longitude = localStorage.getItem('longitude');
 
 if (latitude && longitude) {
+  drawLoading();
   fetchDailyWeatherForecast(latitude, longitude);
 } else {  
   drawEmptyStateLocation();
@@ -139,47 +140,6 @@ function drawContainerWeather(data){
   }
 }
 
-function moreDetails(day){
-  const {sunset, sunrise} = day;
-  const {pressure, humidity} = day.main;
-
-  Swal.fire({
-    title: "Details",
-    customClass: 'swal-wide',
-    showClass: {
-      popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-      popup: 'animate__animated animate__fadeOutUp'
-    },
-    background: toggle.checked ? '#2a8bb1' : '#06294a',
-    
-    html:
-    `<div class="container align-items-center">
-      <div class="row align-items-center details">
-        <div class="col-6 col-md-3">
-          <i class="wi wi-horizon-alt"></i> <p>Sunrise</p>
-          <p>${sunrise ? sunrise.getHours() : 0 }:${sunrise ? sunrise.getMinutes() : 0}</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="wi wi-horizon"></i> <p>Sunset</p>
-          <p>${sunset ? sunset.getHours() : 0 }:${sunset ? sunset.getMinutes() : 0}</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="wi wi-barometer"></i> <p>Pressure</p>
-          <p>${pressure ? pressure : 'No data'}</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <i class="wi wi-humidity"></i> <p>Humidity</p>
-          <p>${pressure ? humidity : 'No data'}%</p>
-        </div>
-      </div>
-    </div>`,
-    showCloseButton: true,
-    showConfirmButton: false
-  });
-}
-
 function drawEmptyStateLocation(){
   content.innerHTML = `
   <div class='row d-flex justify-content-center'>
@@ -196,6 +156,7 @@ function getGeolocation(){
     (position) => {
       localStorage.setItem('latitude', position.coords.latitude);
       localStorage.setItem('longitude', position.coords.longitude)
+      drawLoading();
       fetchDailyWeatherForecast(position.coords.latitude, position.coords.longitude);
      },() => {
       openModalWarning();
