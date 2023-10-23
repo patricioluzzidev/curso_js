@@ -119,7 +119,7 @@ function drawContainerForescast(data){
     if(index <= limitDay){
       myTabHeader.innerHTML += `
       <li class="nav-item" role="presentation">
-        <button class="nav-link ${ index === 0 ? 'active' : '' }" id="${ day.date }-tab" data-bs-toggle="pill" data-bs-target="#${ day.date }" type="button" role="tab" aria-controls="${ day.date }" aria-selected="true">${ day.isToday ? 'TODAY' : day.date.toUpperCase() }</button>
+        <button class="nav-link ${ index === 0 ? 'active' : '' }" id="${ day.date }-tab" data-bs-toggle="pill" data-bs-target="#${ day.date }" type="button" role="tab" aria-controls="${ day.date }" aria-selected="true">${ day.isToday ? 'Today' : day.date.toLowerCase() }</button>
       </li>`
 
       myTabContent.innerHTML += `
