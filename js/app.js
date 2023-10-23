@@ -104,7 +104,7 @@ function drawContainerForescast(data){
 
   const main__content__other__days = document.querySelector('.main__content__other__days'); 
   main__content__other__days.innerHTML = `
-  <div class='row main__content__other__days align-items-sm-center'>
+  <div class='row main__content__other__days align-items-center justify-content-center'>
     <ul class="nav nav-tabs justify-content-center" id="myTabHeader" role="tablist">
     </ul>
     <div class="tab-content" id="myTabContent"> 
@@ -134,7 +134,7 @@ function drawContainerForescast(data){
        
         const divContent = document.querySelector(`#${ day.date } .row`);
         divContent.innerHTML +=`
-        <div class='col-12 col-md-1 text-center'>
+        <div class='col-12 col-md-auto text-center mb-5 mb-md-0'>
           <h2>${ date }hs</h2>
           <i class="wi ${weatherIcon( weatherDesctiption || "")}"></i>
           <h3>${ temp_max ? temp_max : "0" }° | ${ temp_min ? temp_min : "0" }°</h3>
