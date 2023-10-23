@@ -18,12 +18,23 @@ class ForecastData {
       this.data.list.forEach(entry => {
         const dt_txt = entry.dt_txt;
         const date = new Date(dt_txt).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-
+        const isToday = isTodayF(dt_txt);
+    
+        function isTodayF(dt) {
+            const today = new Date();
+            const inputDate = new Date(dt);
+    
+            return (
+                today.toDateString() === inputDate.toDateString()
+            );
+        }
+    
         const existingEntry = groupedData.find(item => item.date === date);
   
         if (!existingEntry) {
           const newEntry = {
             date: date,
+            isToday: isToday,
             weatherData: [entry],
           };
           groupedData.push(newEntry);
