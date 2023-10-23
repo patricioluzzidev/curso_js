@@ -104,7 +104,7 @@ function drawContainerForescast(data){
 
   const main__content__other__days = document.querySelector('.main__content__other__days'); 
   main__content__other__days.innerHTML = `
-  <div class='row main__content__other__days align-items-center justify-content-center'>
+  <div class='main__content__other__days align-items-center justify-content-center'>
     <ul class="nav nav-tabs justify-content-center" id="myTabHeader" role="tablist">
     </ul>
     <div class="tab-content" id="myTabContent"> 
