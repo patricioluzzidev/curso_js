@@ -89,14 +89,17 @@ function weatherIcon(descripcion) {
       return "wi-day-cloudy";
     case "overcast clouds":
       return "wi-cloud";
-    case "mist || fog":
+    case "mist":
+    case  "fog":
       return "wi-fog";
+
     case "light rain":
     case "moderate rain":
     case "drizzle":
       return "wi-day-rain-mix";
     case "heavy rain":
-      return "wi-day-rain";
+    case "heavy intensity rain":  
+      return "wi-rain";
     case "light snow":
     case "moderate snow":
     case "snow showers":

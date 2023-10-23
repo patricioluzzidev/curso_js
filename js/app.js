@@ -76,14 +76,14 @@ function drawContainerWeather(data){
       <h2 class='pb-50'>${weatherData.name ? weatherData.name : "No found"}</h2>
     </div>
   </div>
-  <div class='row main__content__today'>
+  <div class='main__content__today'>
     <div class='col-12 text-center'>
       <i class="wi ${weatherIcon(weatherDesctiption)}"></i>
       <h3>${weatherMain ? weatherMain :  "No Data"} | ${ temp_max ? Math.round(temp_max) : "0" }° | ${ temp_min ? Math.round(temp_min) : "0" }°</h3>
       ${ weather && `<button class='btn btn-primary' id='more-details-btn'>More details</button>`}
       </div>
   </div>
-  <div class='row main__content__other__days align-items-sm-center'>
+  <div class='main__content__other__days align-items-sm-center'>
     <ul class="nav nav-tabs" id="myTabHeader" role="tablist">
     </ul>
     <div class="tab-content" id="myTabContent"> 
