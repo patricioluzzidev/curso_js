@@ -21,7 +21,7 @@ function openModalWarning() {
 
 function openModalError(error) {
   Swal.fire({
-    title: "Upps!",
+    title: "Upps",
     text: "Something is wrong: " + error,
     icon: "error",
     showCloseButton: true,
